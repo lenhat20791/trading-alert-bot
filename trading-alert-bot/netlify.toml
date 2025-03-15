@@ -4,8 +4,8 @@
   publish = "."
 
 [functions]
-  directory = "functions"
-  node_bundler = "esbuild"
+  external_node_modules = ["requests"]
+  included_files = ["requirements.txt"]
 
 [[redirects]]
   from = "/api/*"
