@@ -2,8 +2,7 @@
   functions = "functions"
 
 [functions]
-  external_node_modules = []
-  node_bundler = "esbuild"
+  directory = "functions"
 
 [[redirects]]
   from = "/api/*"
