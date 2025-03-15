@@ -1,10 +1,14 @@
 [build]
+  command = "pip install -r requirements.txt"
   functions = "functions"
+  publish = "public"
 
 [functions]
-  node_bundler = "esbuild"
+  directory = "functions"
+  external_node_modules = []
+  included_files = ["*.py"]
 
 [[redirects]]
-  from = "/api/*"
+  from = "/*"
   to = "/.netlify/functions/:splat"
   status = 200
