@@ -1,8 +1,10 @@
 import json
 import requests
+import os
 
-TELEGRAM_BOT_TOKEN = '7637023247:AAG_utVTC0rXyfute9xsBdh-IrTUE3432o8'  # Thay bằng token thật
-TELEGRAM_CHAT_ID = '7662080576'      # Thay bằng chat ID thật
+# Get from environment variables
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
 def handler(event, context):
     # Add CORS headers
