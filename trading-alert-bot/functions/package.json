@@ -1,0 +1,8 @@
+{
+  "name": "trading-alert-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for Trading Alert Bot",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
