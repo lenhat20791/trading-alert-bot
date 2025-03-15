@@ -1,11 +1,8 @@
 [build]
-  command = ""
   functions = "functions"
-  publish = "."
 
 [functions]
-  external_node_modules = ["requests"]
-  included_files = ["requirements.txt"]
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/api/*"
