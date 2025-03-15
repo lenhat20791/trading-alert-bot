@@ -1,63 +1,39 @@
 import json
-import requests
 import os
-
-# Get from environment variables
-TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
-TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
+import requests
+from http.server import BaseHTTPRequestHandler
 
 def handler(event, context):
-    # Add CORS headers
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS'
-    }
-    
-    # Handle OPTIONS request (preflight)
-    if event['httpMethod'] == 'OPTIONS':
-        return {
-            'statusCode': 200,
-            'headers': headers,
-            'body': ''
-        }
-        
     try:
-        # Parse request body
+        # Parse the incoming JSON
         body = json.loads(event['body'])
         
-        # Extract data
-        message = body.get('message', 'No message provided')
-        symbol = body.get('symbol', 'No symbol provided')
-        price = body.get('price', 'No price provided')
-        time = body.get('time', 'No time provided')
+        # Get environment variables
+        bot_token = os.environ['TELEGRAM_BOT_TOKEN']
+        chat_id = os.environ['TELEGRAM_CHAT_ID']
         
         # Format message
-        alert_message = f"🔔 Trading Alert!\n\n" \
-                       f"Symbol: {symbol}\n" \
-                       f"Price: {price}\n" \
-                       f"Time: {time}\n" \
-                       f"Message: {message}"
+        message = f"🔔 Trading Alert!\n\n" \
+                 f"Symbol: {body['symbol']}\n" \
+                 f"Price: {body['price']}\n" \
+                 f"Message: {body['message']}\n" \
+                 f"Time: {body['time']}"
         
         # Send to Telegram
-        telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-        payload = {
-            'chat_id': TELEGRAM_CHAT_ID,
-            'text': alert_message
-        }
-        
-        response = requests.post(telegram_url, json=payload)
-        response.raise_for_status()
+        telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        response = requests.post(telegram_url, json={
+            'chat_id': chat_id,
+            'text': message,
+            'parse_mode': 'HTML'
+        })
         
         return {
             'statusCode': 200,
-            'headers': headers,
-            'body': json.dumps({'message': 'Alert sent successfully'})
+            'body': json.dumps({'status': 'success', 'message': 'Alert sent'})
         }
         
     except Exception as e:
         return {
             'statusCode': 500,
-            'headers': headers,
-            'body': json.dumps({'error': str(e)})
+            'body': json.dumps({'status': 'error', 'message': str(e)})
         }
